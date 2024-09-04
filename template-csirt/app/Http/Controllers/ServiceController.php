@@ -17,11 +17,6 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $profileData = Profil::getProfileData();
@@ -31,11 +26,6 @@ class ServiceController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $profileData = Profil::getProfileData();
@@ -45,12 +35,6 @@ class ServiceController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreServiceRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreServiceRequest $request)
     {
         $validatedData = $request->validate([
@@ -59,18 +43,10 @@ class ServiceController extends Controller
         ]);
 
         $validatedData['slug'] = Str::slug($validatedData['name'],'-');
-
         Service::create($validatedData);
-
-        return redirect('/dashboard/services')->with('success', 'New Service has been added!');
+        return redirect('/dashboard/services')->with('success', 'Layanan baru telah ditambah!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
     public function show(Service $service)
     {
         $profileData = Profil::getProfileData();
@@ -81,12 +57,6 @@ class ServiceController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Service $service)
     {
         $profileData = Profil::getProfileData();
@@ -97,13 +67,6 @@ class ServiceController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateServiceRequest  $request
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateServiceRequest $request, Service $service)
     {
         $validatedData = $request->validate([
@@ -112,29 +75,19 @@ class ServiceController extends Controller
         ]);
 
         $validatedData['slug'] = Str::slug($validatedData['name'],'-');
-
         Service::where('id', $service->id)->update($validatedData);
-
-        return redirect('/dashboard/services')->with('success', 'Service has been updated!');
+        return redirect('/dashboard/services')->with('success', 'Layanan telah diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Service $service)
     {
         $service->delete();
-
-        return redirect('/dashboard/services')->with('success', 'Service has been deleted!');
+        return redirect('/dashboard/services')->with('success', 'Layanan telah dihapus!');
     }
 
     public function index1 ()
     {
         $profileData = Profil::getProfileData();
-
         return view('service', array_merge([
             "includeHero" => false,
             'properties' => ImageProperty::where('property', 'Logo')->latest()->get(),

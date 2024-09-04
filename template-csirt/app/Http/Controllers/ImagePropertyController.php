@@ -11,11 +11,6 @@ use App\Http\Requests\UpdateImagePropertyRequest;
 
 class ImagePropertyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $properties = ImageProperty::all();
@@ -26,23 +21,12 @@ class ImagePropertyController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $profileData = Profil::getProfileData();
         return view('dashboard.properties.create', $profileData);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreImagePropertyRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreImagePropertyRequest $request)
     {
         $validatedData = $request->validate([
@@ -56,29 +40,10 @@ class ImagePropertyController extends Controller
         }
 
         $validatedData['slug'] = Str::slug($validatedData['name'], '-');
-
         ImageProperty::create($validatedData);
-
         return redirect('/dashboard/properties')->with('success', 'New Property has been added!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ImageProperty  $imageProperty
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ImageProperty $imageProperty)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ImageProperty  $property
-     * @return \Illuminate\Http\Response
-     */
     public function edit(ImageProperty $property)
     {
         $profileData = Profil::getProfileData();
@@ -87,13 +52,6 @@ class ImagePropertyController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateImagePropertyRequest  $request
-     * @param  \App\Models\ImageProperty  $property
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateImagePropertyRequest $request, ImageProperty $property)
     {
         $rules = [
@@ -121,12 +79,6 @@ class ImagePropertyController extends Controller
         return redirect('/dashboard/properties')->with('success', 'Property has been updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ImageProperty  $property
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(ImageProperty $property)
     {
         if ($property->image) {

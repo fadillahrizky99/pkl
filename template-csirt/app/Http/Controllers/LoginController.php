@@ -16,10 +16,8 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 class LoginController extends Controller
 {
-
     protected $maxAttempts = 2; // Default is 5
     protected $decayMinutes = 1; // Default is 1
-
     public function index()
     {
         $profileData = Profil::getProfileData();
@@ -35,7 +33,6 @@ class LoginController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            // 'captcha' => 'required|captcha'
         ]);
 
         if(Auth::attempt([
@@ -43,27 +40,16 @@ class LoginController extends Controller
             'password' => $request->password
         ])){
             Auth::logoutOtherDevices(request('password'));
-
             $request->session()->regenerate();
-
             return redirect()->intended('/dashboard');
         } 
-
         return back()->with('loginError', 'Login Failed');
     }
 
-    // public function reloadCaptcha()
-    // {
-    //     return response()->json(['captcha'=> captcha_img()]);
-    // }
-
     public function logout(Request $request){
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

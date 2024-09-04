@@ -26,17 +26,6 @@ use App\Models\Key;
 use App\Models\Service;
 use Spatie\Csp\AddCspHeaders;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware(Spatie\Csp\AddCspHeaders::class);
 Route::get('/profil', [ProfilController::class, 'index1'])->name('profil')->middleware(Spatie\Csp\AddCspHeaders::class);
 Route::get('/file', [FileController::class, 'index1'])->middleware(Spatie\Csp\AddCspHeaders::class);
@@ -61,23 +50,14 @@ Route::get('/dashboard', function(){
         'profils' => Profil::latest()->get(),
     ], $profileData));
 })->middleware('auth');
-
-
 Route::get('/dashboard/posts/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
 Route::get('/dashboard/categories/checkSlug', [AdminCategoryController::class, 'checkSlug'])->middleware('auth');
 Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')->middleware('auth', 'admin');
-// Route::resource('/dashboard/footers', FooterController::class)->except('show')->middleware('admin');
 Route::resource('/dashboard/properties', ImagePropertyController::class)->except('show')->middleware('auth', 'admin'); 
-// Route::resource('/dashboard/profils', ProfilController::class)->middleware('admin');
-
-// Route::get('/dashboard/profils/', [ProfilController::class, 'editLatest'])->name('profils.editLatest')->middleware('admin');
-// Route::put('/dashboard/profils/{profil:value}', [ProfilController::class, 'update']);
-
 Route::get('/dashboard/profils/', [ProfilController::class, 'editLatest'])->name('profils.editLatest')->middleware('auth', 'admin');
 Route::put('/dashboard/profils/{name}', [ProfilController::class, 'update'])->middleware('auth', 'admin');
 Route::resource('/dashboard/files', FileController::class)->only(['index', 'create', 'store', 'destroy'])->middleware('auth', 'admin');
-// Route::resource('/dashboard/users', UserManagementController::class)->only(['index', 'edit', 'update'])->middleware(Spatie\Csp\AddCspHeaders::class,'superadmin');
 Route::resource('/dashboard/users', UserManagementController::class)->only(['index', 'edit', 'update'])->middleware('auth', 'admin');
 Route::resource('/dashboard/services', ServiceController::class)->middleware('auth', 'admin');
 Route::resource('/dashboard/keys', KeyController::class)->only(['index', 'create', 'store', 'destroy'])->middleware('auth', 'admin');

@@ -18,11 +18,6 @@ use Ramsey\Uuid\Guid\Guid;
 
 class GuidanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $profileData = Profil::getProfileData();
@@ -33,11 +28,6 @@ class GuidanceController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $profileData = Profil::getProfileData();
@@ -48,12 +38,6 @@ class GuidanceController extends Controller
         ], $profileData));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreGuidanceRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreGuidanceRequest $request)
     {
         $request->validate([
@@ -80,23 +64,6 @@ class GuidanceController extends Controller
             }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Guidance  $guidance
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Guidance $guidance)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Guidance  $guidance
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Guidance $guidance)
     {
         $profileData = Profil::getProfileData();
@@ -108,14 +75,7 @@ class GuidanceController extends Controller
             'properties' => ImageProperty::where('property', 'Logo')->latest()->get()
         ], $profileData));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateGuidanceRequest  $request
-     * @param  \App\Models\Guidance  $guidance
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(UpdateGuidanceRequest $request, Guidance $guidance)
     {
         $rules = [
@@ -137,31 +97,21 @@ class GuidanceController extends Controller
             $validatedData['size'] = $request->file->getSize();
             $validatedData['slug'] = Str::slug($request->name,'-');
         }
-
         Guidance::where('id', $guidance->id)->update($validatedData);
-
         return redirect('/dashboard/guidances')->with('success', 'Panduan telah diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Guidance  $guidance
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Guidance $guidance)
     {
         if($guidance->path) {
             Storage::delete($guidance->path);
          }
          Guidance::destroy($guidance->id);
- 
          return redirect('/dashboard/guidances')->with('success', 'Panduan has been deleted!');
     }
 
     public function index1 () {
         $profileData = Profil::getProfileData();
-
         return view('guidance', array_merge([
             "includeHero" => false,
             'posts' => Post::where('published', true)->latest()->get(),
